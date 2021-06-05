@@ -1,9 +1,9 @@
 import React, { FormEvent } from 'react';
+import { useStyletron } from 'baseui';
 
 import { Input } from 'baseui/input';
 import { Button } from "baseui/button";
 import { Search as IconSearch } from 'baseui/icon'
-import { useStyletron } from 'baseui';
 import { useLiveRegion } from "@chakra-ui/live-region"
 
 import OmdbApi from './OmdbApi';
@@ -31,7 +31,7 @@ export default function SearchBox({ setMovies, setfirstSearch }: SearchBoxProps)
     OmdbClient.searchMovies(value).then( (movies) => {
       setMovies(movies)
       setfirstSearch(true)
-      liveRegion.speak("Searched "+value+". There are about "+movies.length+" results.") // FIXME: screen reader sometimes repeat old strings
+      liveRegion.speak(`You searched "`+value+`".`) // FIXME: screen reader sometimes repeat old strings
       inputEl?.current?.blur()
     })
   }
@@ -50,6 +50,7 @@ export default function SearchBox({ setMovies, setfirstSearch }: SearchBoxProps)
           placeholder={labelText}
           onChange={onChange}
           aria-label={a11yDescription}
+          aria-role="searchbox"
           clearable
           clearOnEscape
           inputRef={inputEl}
