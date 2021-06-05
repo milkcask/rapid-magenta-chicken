@@ -1,6 +1,7 @@
 import React from 'react';
 import MovieCard from './MovieCard';
-import {FlexGrid, FlexGridItem} from 'baseui/flex-grid';
+import {Grid, Cell, StyledCell} from 'baseui/layout-grid';
+
 import {
   Caption1,
 } from 'baseui/typography';
@@ -14,22 +15,25 @@ type MovieSearchResultProps = {
 const MovieSearchResult = ({ movies }: MovieSearchResultProps) => 
   <main tabIndex={0} role="main">
     <HeadingLevel>
-      <Heading styleLevel={3}>Search result</Heading>
-      <Caption1>About {movies.length} results</Caption1> {/* Improvement: focus for accessibility? */}
-      <FlexGrid
-        flexGridColumnCount={[2, 2, 3, 6]}
-        flexGridColumnGap="scale400"
-        flexGridRowGap="scale400"
-        marginTop="scale400"
+      <Grid
+        gridColumns={[2, 3, 5]}
+        gridUnit="rem"
+        gridGutters={[0.5, 1, 1]}
+        gridMargins={[1, 2, 6]}
+        gridGaps={1.75}
       >
+      <StyledCell $gridGaps={0} $span={12}>
+        <Heading styleLevel={3}>Search result</Heading>
+        <Caption1>About {movies.length} results</Caption1> {/* Improvement: focus for accessibility? */}
+      </StyledCell>
       { movies.map((movie) => (
-        <FlexGridItem>
+        <Cell key={movie.id}>
           <MovieCard
             movie={movie}
           />
-        </FlexGridItem>
+        </Cell>
       ))}
-      </FlexGrid>
+      </Grid>
     </HeadingLevel>
   </main>
 
