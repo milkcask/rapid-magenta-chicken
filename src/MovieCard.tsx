@@ -22,7 +22,7 @@ const MovieCard = ({ movie }: MovieCardProps) =>
       overrides={{
         HeaderImage: {props:{tabIndex: -1 }},
         Title: {
-          component: () => <Heading styleLevel={5}>{movie.title}</Heading>
+          component: () => <Heading styleLevel={5} overrides={{Block: {props:{tabIndex: 0 }}}}>{movie.title}</Heading>
         },
         Body: {props:{tabIndex: -1 }},
       }}
