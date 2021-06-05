@@ -1,8 +1,11 @@
 import React, { FormEvent } from 'react';
-import {Input} from 'baseui/input';
-import {Button} from "baseui/button";
-import {Search as IconSearch} from 'baseui/icon'
-import {useStyletron} from 'baseui';
+
+import { Input } from 'baseui/input';
+import { Button } from "baseui/button";
+import { Search as IconSearch } from 'baseui/icon'
+import { useStyletron } from 'baseui';
+import { useLiveRegion } from "@chakra-ui/live-region"
+
 import OmdbApi from './OmdbApi';
 
 type SearchBoxProps = {
@@ -19,12 +22,17 @@ export default function SearchBox({ setMovies, setfirstSearch }: SearchBoxProps)
     setValue(value);
   };
 
+  const liveRegion = useLiveRegion({ 'aria-live': "assertive"})
+  const inputEl = React.useRef<HTMLInputElement>(null);
+
   const search = (event:FormEvent) => {
     event.preventDefault();
     const OmdbClient = new OmdbApi();
     OmdbClient.searchMovies(value).then( (movies) => {
       setMovies(movies)
       setfirstSearch(true)
+      liveRegion.speak("Searched "+value+". There are about "+movies.length+" results.") // FIXME: screen reader sometimes repeat old strings
+      inputEl?.current?.blur()
     })
   }
 
@@ -33,7 +41,7 @@ export default function SearchBox({ setMovies, setfirstSearch }: SearchBoxProps)
 
   return (
     <form name="search" role="search" action="." onSubmit={search}>
-      <div className={css({display: 'flex'})}>
+      <div className={css({display: 'flex'})} tabIndex={0}>
         <Input
           type="search"
           name="search"
@@ -44,7 +52,7 @@ export default function SearchBox({ setMovies, setfirstSearch }: SearchBoxProps)
           aria-label={a11yDescription}
           clearable
           clearOnEscape
-          autoFocus
+          inputRef={inputEl}
         />
         <Button type="submit">
           <IconSearch />

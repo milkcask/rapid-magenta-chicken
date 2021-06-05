@@ -12,7 +12,7 @@ import {
 } from 'baseui/header-navigation';
 
 import SearchBox from './SearchBox';
-import MovieSearchResults from './MovieSearchResults';
+import MovieSearchResult from './MovieSearchResult';
 
 const engine = new Styletron();
 
@@ -34,7 +34,7 @@ function App() {
           </NavigationList>
         </HeaderNavigation>
         { firstSearch ? (
-          <MovieSearchResults movies={movies} />
+          <MovieSearchResult movies={movies} />
         ):(null)}
       </BaseProvider>
     </StyletronProvider>
