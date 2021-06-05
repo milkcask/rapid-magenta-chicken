@@ -1,10 +1,10 @@
 import React, { FormEvent } from 'react';
 import { useStyletron } from 'baseui';
 
+import { FormControl } from "baseui/form-control";
 import { Input } from 'baseui/input';
 import { Button } from "baseui/button";
 import { Search as IconSearch } from 'baseui/icon'
-import { useLiveRegion } from "@chakra-ui/live-region"
 
 import OmdbApi from './OmdbApi';
 
@@ -16,45 +16,63 @@ type SearchBoxProps = {
 export default function SearchBox({ setMovies, setfirstSearch }: SearchBoxProps) {
   const [css, theme] = useStyletron();
 
+  const labelText = 'Search movie'
+  const a11yDescription = 'Search the O-M-D-B- for movie by title name.'
+  const [a11yCaption, setA11yCaption] = React.useState(a11yDescription);
+  const inputEl = React.useRef<HTMLInputElement>(null);
+
   const [value, setValue] = React.useState('');
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const {value} = event.currentTarget;
     setValue(value);
+    setA11yCaption(a11yDescription);
   };
-
-  const liveRegion = useLiveRegion({ 'aria-live': "assertive"})
-  const inputEl = React.useRef<HTMLInputElement>(null);
 
   const search = (event:FormEvent) => {
     event.preventDefault();
     const OmdbClient = new OmdbApi();
-    OmdbClient.searchMovies(value).then( (movies) => {
-      setMovies(movies)
+    OmdbClient.searchMovies(value).then( (resultMovies) => {
+      setMovies(resultMovies)
       setfirstSearch(true)
-      liveRegion.speak(`You searched "`+value+`".`) // FIXME: screen reader sometimes repeat old strings
+      setA11yCaption(`You searched "`+value+`". ` + a11yDescription)
       inputEl?.current?.blur()
     })
   }
 
-  const labelText = 'Search movie'
-  const a11yDescription = 'Search the O-M-D-B- for movie by title name'
+  const srOnly = css({
+    position:'absolute',
+    left:'-10000px',
+    top:'auto',
+    width:'1px',
+    height:'1px',
+    overflow:'hidden',
+  })
 
   return (
     <form name="search" role="search" action="." onSubmit={search}>
-      <div className={css({display: 'flex'})} tabIndex={0}>
-        <Input
-          type="search"
-          name="search"
-          id="search"
-          value={value}
-          placeholder={labelText}
-          onChange={onChange}
-          aria-label={a11yDescription}
-          aria-role="searchbox"
-          clearable
-          clearOnEscape
-          inputRef={inputEl}
-        />
+      <div tabIndex={0} className={css({display: 'flex'})}>
+        <FormControl
+          label={() => labelText}
+          caption={() => a11yCaption}
+          overrides={{
+            Label: { props: { className: srOnly}},
+            Caption: { props: { className: srOnly, "aria-live": "assertive"}},
+            ControlContainer: { style: { margin: 0}},
+          }}
+        >
+          <Input
+            type="search"
+            name="search"
+            id="search"
+            value={value}
+            placeholder={labelText}
+            onChange={onChange}
+            aria-role="searchbox"
+            clearable
+            clearOnEscape
+            inputRef={inputEl}
+          />
+        </FormControl>
         <Button type="submit">
           <IconSearch />
         </Button>
