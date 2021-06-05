@@ -1,4 +1,8 @@
-# Getting Started with search-omdb
+# What is rapid-magenta-chicken?
+
+This is a simple take-home frontend task I completed recently. The requirements was: allow a user to search for a movie by title via the OMDb API; with TypeScript and good accessibility as bonus. I keep it up to showcase.
+
+# Getting Started with rapid-magenta-chicken
 
 You must update `.env`.
 
