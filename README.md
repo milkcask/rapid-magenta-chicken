@@ -1,6 +1,6 @@
-# What is rapid-magenta-chicken?
+# Introducing the mysterious rapid-magenta-chicken
 
-This is a simple take-home frontend task I completed recently. The requirements was: allow a user to search for a movie by title via the OMDb API; with TypeScript and good accessibility as bonus. I keep it up to showcase.
+A simple 2-hour take-home frontend task I completed for an interview with a publicly listed Silicon Valley company. The requirements: allow users to search for movies by title name via the OMDb API; (bonus) TypeScript and good a11y.
 
 # Getting Started with rapid-magenta-chicken
 
